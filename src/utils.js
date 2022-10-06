@@ -35,22 +35,29 @@ const getFiles = (files = [], extension = '') => {
 };
 
 const renameFile = (dir, file, separator, number, options = {}) => {
-  const { forceShuffle, dryRun, debug } = options;
+  const { forceShuffle, dryRun, debug, cleanName } = options;
 
   const existingPrefix = isPrefixed(file, separator)
     ? getPrefixNum(file) + separator
     : '';
 
-  const cleanFile = forceShuffle
+  let fileName = forceShuffle
     ? file
     : file.slice(existingPrefix.length);
+  
+  if(cleanName){
+    const extenstionIndex = fileName.lastIndexOf(".")
+    if(extenstionIndex != -1){
+      fileName = fileName.substring(extenstionIndex)
+    }
+  }
 
   if (existingPrefix && debug) {
-    console.log(file, '- stripped to:', cleanFile);
+    console.log(file, '- stripped to:', fileName);
   }
 
   const origPath = path.join(dir, file);
-  const newPath = path.join(dir, `${number}${separator}${cleanFile}`)
+  const newPath = path.join(dir, `${number}${separator}${fileName}`)
 
   if (debug || dryRun) {
     console.log('Renaming', origPath, 'to', newPath);

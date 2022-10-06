@@ -9,7 +9,7 @@ const { getFiles, renameFile } = require('./src/utils');
 const targetDir = yargs.argv._[0] || '.';
 const dir = path.resolve(process.cwd(), targetDir);
 
-const defaultSeparator = '__';
+const defaultSeparator = '';
 const separator = yargs.argv.s || yargs.argv.separator || defaultSeparator;
 const extension = yargs.argv.e || yargs.argv.extension || '';
 
@@ -18,6 +18,7 @@ const getBooleanFlag = (flag) => [true, 'true', 'yes'].includes(flag);
 const forceShuffle = getBooleanFlag(yargs.argv.force);
 const dryRun = getBooleanFlag(yargs.argv.dry);
 const debug = getBooleanFlag(yargs.argv.debug);
+const cleanName = getBooleanFlag(yargs.argv.cleanName)
 
 if (debug) {
   console.log({
@@ -25,7 +26,8 @@ if (debug) {
     separator,
     forceShuffle,
     dryRun,
-    debug
+    debug,
+    cleanName
   });
 }
 
@@ -54,6 +56,7 @@ for (let a = indexes.slice(), i = a.length; i--; ) {
   renameFile(dir, files[i], defaultSeparator, paddedNumber, {
     forceShuffle,
     dryRun,
+    cleanName,
     debug
   });
 }
